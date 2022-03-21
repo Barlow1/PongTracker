@@ -1,0 +1,1 @@
+docker-compose -f ./localDB/docker-compose.yml kill
