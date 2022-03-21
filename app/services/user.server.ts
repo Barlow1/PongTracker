@@ -44,7 +44,7 @@ export const createUser = async ({
         organization: {
           connectOrCreate: {
             where: {
-              name: organization,
+              code: organization,
             },
             create: {
               name: organizationName,
