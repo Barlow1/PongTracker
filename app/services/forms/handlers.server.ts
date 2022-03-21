@@ -1,7 +1,7 @@
 import { json, redirect } from 'remix';
 import { getUserSession } from '~/utils/user.session';
 import { getOrganizationByCode } from '../organization.server';
-import { createUser, login } from '../user.server';
+import { createUser, getUserByEmail, login } from '../user.server';
 import {
   LoginActionData,
   LoginErrors,
@@ -11,7 +11,15 @@ import {
   RegistrationFields,
 } from './types';
 
-const getEmailError = (email: string | null) => {
+const getRegisterEmailError = async (email: string | null) => {
+  if (!email) return `Email is required`;
+  if (await getUserByEmail(email))
+    return 'Email is already taken, please log in.';
+  if (!/^.+@.+\..+$/.test(email)) return `Email is not valid`;
+  return null;
+};
+
+const getLoginEmailError = (email: string | null) => {
   if (!email) return `Email is required`;
   if (!/^.+@.+\..+$/.test(email)) return `Email is not valid`;
   return null;
@@ -36,7 +44,7 @@ const getOrganizationError = async (organization: string | null) => {
 
 const getOrganizationNameError = (organization: string | null) => {
   if (organization?.length && organization?.length > 60) {
-        return `Organization Name is too long`;
+    return `Organization Name is too long`;
   }
   return null;
 };
@@ -62,7 +70,7 @@ export const handleRegistrationFormSubmission = async (request: Request) => {
   const errors: RegistrationErrors = {
     generalError: null,
     name: getNameError(fields.name),
-    email: getEmailError(fields.email),
+    email: await getRegisterEmailError(fields.email),
     password: getPasswordError(fields.password),
     organization: await getOrganizationError(fields.organization),
     organizationName: getOrganizationNameError(fields.organizationName),
@@ -110,7 +118,7 @@ export const handleLoginFormSubmission = async (request: Request) => {
 
   const errors: LoginErrors = {
     generalError: null,
-    email: getEmailError(fields.email),
+    email: getLoginEmailError(fields.email),
     password: getPasswordError(fields.password),
   };
 

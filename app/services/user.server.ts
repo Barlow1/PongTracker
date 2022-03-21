@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
-import { Player, PlayerWithOrg } from "~/utils/types";
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+import { Player, PlayerWithOrg } from '~/utils/types';
 const saltRounds = 10;
 const prisma = new PrismaClient();
 
@@ -48,20 +48,20 @@ export const createUser = async ({
             },
             create: {
               name: organizationName,
-              code: organization
+              code: organization,
             },
           },
         },
       },
       include: {
         organization: true,
-      }
+      },
     })
     .then((response) => {
       return response;
     })
     .catch((error) => {
-      console.log("Error adding user", error);
+      console.log('Error adding user', error);
       return error;
     })
     .finally(() => {
@@ -74,10 +74,29 @@ export const getUsers = async (): Promise<Player[]> => {
     .findMany()
     .then((users) =>
       users.map((user) => {
-        const player: Player = exclude(user, "password");
+        const player: Player = exclude(user, 'password');
         return player;
       })
     )
+    .finally(() => {
+      prisma.$disconnect();
+    });
+};
+
+export const getUserByEmail = async (email: string): Promise<Player | null> => {
+  return prisma.user
+    .findUnique({
+      where: {
+        email,
+      },
+    })
+    .then((user) => {
+      if (user) {
+        const player: Player = exclude(user, 'password')
+      return player;
+      }
+      return null
+    })
     .finally(() => {
       prisma.$disconnect();
     });
@@ -92,7 +111,7 @@ export const getUsersByOrgId = async (orgId: number): Promise<Player[]> => {
     })
     .then((users) =>
       users.map((user) => {
-        const player: Player = exclude(user, "password");
+        const player: Player = exclude(user, 'password');
         return player;
       })
     )
@@ -111,17 +130,17 @@ export const login = async ({
         email,
       },
       include: {
-        organization: true
-      }
+        organization: true,
+      },
     })
     .finally(() => {
       prisma.$disconnect();
     });
   if (!user) {
-    throw new Error("User is not registered");
+    throw new Error('User is not registered');
   }
   const checkPassword = bcrypt.compareSync(password, user.password);
-  if (!checkPassword) throw new Error("Email address or password not valid");
-  const player: PlayerWithOrg = exclude(user, "password");
+  if (!checkPassword) throw new Error('Email address or password not valid');
+  const player: PlayerWithOrg = exclude(user, 'password');
   return player;
 };
