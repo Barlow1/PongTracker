@@ -31,7 +31,7 @@ const Home = ({ user }: IHomeProps) => {
           </Link>
           <Link to="/play/leaderboard" prefetch="intent">
             <Button color="blue" style={{ width: '200px' }}>
-              LeaderBoard&nbsp;
+              Leaderboard&nbsp;
               <FontAwesomeIcon icon={faTrophy} />
             </Button>
           </Link>
