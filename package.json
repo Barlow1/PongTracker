@@ -4,7 +4,7 @@
   "description": "",
   "license": "",
   "scripts": {
-    "build": "npm run build:css && remix build",
+    "build": "npm run build:css && remix build && npx prisma migrate deploy",
     "build:css": "concurrently \"tailwindcss -o ./app/styles/tailwind.css\" \"postcss styles --base styles --dir app/styles --env production\"",
     "dev": "concurrently \"npm run dev:localdb\" \"npm run dev:css\" \"npm run dev:netlify\" && localDB/stop.sh",
     "dev:css": "concurrently \"postcss styles --base styles --dir app/styles -w\"",
