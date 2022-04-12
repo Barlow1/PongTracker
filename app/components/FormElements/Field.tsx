@@ -14,21 +14,22 @@ export default function Field({
   error,
   label,
   disabled,
-}: FieldProps) {
+  ...rest
+}: FieldProps &
+  React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >) {
   const errorId = `${name}-error`;
   const getInputByType = (type: string) => {
-      switch(type) {
-          case('textarea'):
-          return (
-            <textarea disabled={disabled} name={name} ></textarea>
-          );
-          break;
-          default:
-              return <input disabled={disabled} name={name} type={type} />;
-
-      }
-
-  }
+    switch (type) {
+      case 'textarea':
+        return <textarea disabled={disabled} name={name}></textarea>;
+        break;
+      default:
+        return <input {...rest} disabled={disabled} name={name} type={type} />;
+    }
+  };
   const input = getInputByType(type);
   return (
     <>

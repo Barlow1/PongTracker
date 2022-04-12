@@ -1,4 +1,5 @@
 import {
+  faGear,
   faHome,
   faNewspaper,
   faPlus,
@@ -81,6 +82,18 @@ export default function Play() {
               </li>
               {user ? (
                 <li className="py-2">
+                  <Link
+                    className="underlined"
+                    prefetch="intent"
+                    to={'/play/settings'}
+                  >
+                    Settings&nbsp;
+                    <FontAwesomeIcon icon={faGear} />
+                  </Link>
+                </li>
+              ) : null}
+              {user ? (
+                <li className="py-2">
                   <Form
                     reloadDocument
                     replace
@@ -149,6 +162,18 @@ export default function Play() {
                     <FontAwesomeIcon icon={faTrophy} />
                   </Link>
                 </li>
+                {user ? (
+                  <li className="py-2">
+                    <Link
+                      className="underlined"
+                      prefetch="intent"
+                      to={'/play/settings'}
+                    >
+                      Settings&nbsp;
+                      <FontAwesomeIcon icon={faGear} />
+                    </Link>
+                  </li>
+                ) : null}
                 {user ? (
                   <li className="py-2">
                     <Form

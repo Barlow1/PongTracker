@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Organization, PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { Player, PlayerWithOrg } from '~/utils/types';
 const saltRounds = 10;
@@ -82,6 +82,34 @@ export const getUsers = async (): Promise<Player[]> => {
       prisma.$disconnect();
     });
 };
+
+export const getUserWithOrg = async (
+  id: number
+): Promise<(Player & { organization: Organization }) | null> => {
+  return prisma.user
+    .findUnique({
+      where: {
+        id,
+      },
+      include: {
+        organization: true,
+      },
+    })
+    .then((user) => {
+      if (user) {
+        const player: Player & { organization: Organization } = exclude(
+          user,
+          'password'
+        );
+        return player;
+      }
+      return null;
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
+};
+
 
 export const getUserByEmail = async (email: string): Promise<Player | null> => {
   return prisma.user
