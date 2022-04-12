@@ -38,9 +38,9 @@ export default function Leaderboard() {
                     className="border-2 border-gray-100 rounded-md"
                     key={player.id}
                   >
-                    <td className="p-10">{`${rank + 1}`}</td>
-                    <td className="p-10">{`${player.name}`}</td>
-                    <td className="p-10">{`${player.elo}`}</td>
+                    <td className="p-5 md:p-10">{`${rank + 1}`}</td>
+                    <td className="p-5 md:p-10">{`${player.name}`}</td>
+                    <td className="p-5 md:p-10">{`${player.elo}`}</td>
                   </tr>
                 );
               })}
