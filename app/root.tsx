@@ -188,7 +188,7 @@ function DocumentWithTheme({
 }): JSX.Element {
   return (
     <ThemeProvider suppliedTheme={theme}>
-      <Document {...rest}>{children}</Document>
+      <Document {...rest} title={'PongTracker'}>{children}</Document>
     </ThemeProvider>
   );
 }
