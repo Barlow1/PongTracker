@@ -37,7 +37,7 @@ export default function Register() {
           <Field
             name="name"
             type="text"
-            label="Name"
+            label="Full Name"
             error={data?.status === 'error' ? data.errors.name : null}
             disabled={register.state === 'loading' || success}
           />
