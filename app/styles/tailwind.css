@@ -1296,6 +1296,11 @@ Ensure the default browser behavior of the `hidden` attribute.
           text-decoration-color: currentColor;
 }
 
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
@@ -1356,6 +1361,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+.disabled\:bg-gray-600:disabled {
+  background-color: var(--color-gray-600);
+}
+.disabled\:text-gray-300:disabled {
+  color: var(--color-gray-300);
 }
 .disabled\:checked\:bg-blue-500:checked:disabled {
   background-color: var(--color-blue-500);

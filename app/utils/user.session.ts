@@ -10,7 +10,7 @@ const { getSession, commitSession, destroySession } =
     // a Cookie from `createCookie` or the CookieOptions to create one
     cookie: {
       name: 'CJB_user',
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: 'lax',
       path: '/',
       expires: userSessionExpirationDate, // 30 days
