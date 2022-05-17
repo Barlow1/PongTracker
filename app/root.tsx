@@ -176,6 +176,7 @@ function Document({
         />
         <link rel="manifest" href="/site.webmanifest" />
         <meta charSet="utf-8" />
+        <meta name="theme-color" content={theme === "dark" ? "#171921" : "#000000" } />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         {title ? <title>{title}</title> : null}
         <Meta />
