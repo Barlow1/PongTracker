@@ -128,7 +128,7 @@ export default function Play() {
               <ul>
                 <li className="py-2">
                   <Link className="underlined" prefetch="intent" to={'/play'}>
-                    Home&nbsp;
+                    Play&nbsp;
                     <FontAwesomeIcon icon={faHome} />
                   </Link>
                 </li>

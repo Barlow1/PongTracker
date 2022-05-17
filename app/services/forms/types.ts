@@ -28,3 +28,16 @@ export type LoginErrors = Record<
 export type LoginActionData =
   | { status: "success" }
   | { status: "error"; errors: LoginErrors };
+
+  export type EditUserFields = {
+    name: string;
+  };
+
+  export type EditUserErrors = Record<
+    keyof EditUserFields | 'generalError',
+    string | null
+  >;
+
+  export type EditUserActionData =
+    | { status: 'success' }
+    | { status: 'error'; errors: EditUserErrors };

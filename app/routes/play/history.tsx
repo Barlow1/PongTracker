@@ -1,7 +1,12 @@
-import { faCheck, faXmarkSquare } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck,
+  faPlus,
+  faXmarkSquare,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Match, PlayerMatch } from '@prisma/client';
-import { LoaderFunction, useLoaderData } from 'remix';
+import { Link, LoaderFunction, useLoaderData } from 'remix';
+import Button from '~/components/Button/Button';
 import { H1, Paragraph } from '~/components/Typography/Typography';
 import { useUser } from '~/hooks/useRootData';
 import { getPlayerElo } from '~/services/elo.server';
@@ -33,6 +38,23 @@ export default function History() {
         <H1>Match History</H1>
         <Paragraph>Total Wins: {totalWins}</Paragraph>
         <Paragraph>ELO: {elo}</Paragraph>
+
+        {!playerMatches.length ? (
+          <>
+          <br/>
+            <Paragraph>No matches found 🥲</Paragraph>
+            <Link
+              className="decoration-current"
+              to="/play/match"
+              prefetch="intent"
+            >
+              <Button color="blue">
+                Record a match&nbsp;
+                <FontAwesomeIcon icon={faPlus} />
+              </Button>
+            </Link>
+          </>
+        ) : null}
 
         {playerMatches.map((match) => {
           return (

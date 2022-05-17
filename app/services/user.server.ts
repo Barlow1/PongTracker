@@ -11,6 +11,11 @@ interface CreateUser {
   email: string;
   password: string;
 }
+
+interface EditUser {
+  id: number;
+  name: string;
+}
 interface LoginUser {
   email: string;
   password: string;
@@ -69,6 +74,34 @@ export const createUser = async ({
     });
 };
 
+export const updateUser = async ({
+  id,
+  name,
+}: EditUser): Promise<PlayerWithOrg> => {
+  return prisma.user
+    .update({
+      data: {
+        name,
+      },
+      where: {
+        id
+      },
+      include: {
+        organization: true,
+      },
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log('Error editing user', error);
+      return error;
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
+};
+
 export const getUsers = async (): Promise<Player[]> => {
   return prisma.user
     .findMany()
@@ -110,7 +143,6 @@ export const getUserWithOrg = async (
     });
 };
 
-
 export const getUserByEmail = async (email: string): Promise<Player | null> => {
   return prisma.user
     .findUnique({
@@ -120,10 +152,10 @@ export const getUserByEmail = async (email: string): Promise<Player | null> => {
     })
     .then((user) => {
       if (user) {
-        const player: Player = exclude(user, 'password')
-      return player;
+        const player: Player = exclude(user, 'password');
+        return player;
       }
-      return null
+      return null;
     })
     .finally(() => {
       prisma.$disconnect();

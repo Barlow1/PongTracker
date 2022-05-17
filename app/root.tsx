@@ -1,4 +1,5 @@
 import {
+  json,
   Link,
   Links,
   LiveReload,
@@ -21,8 +22,9 @@ import { Navigation } from './components/Navigation/Navigation';
 import faCss from '@fortawesome/fontawesome-svg-core/styles.css';
 import { Footer } from './components/Footer/Footer';
 import { getThemeSession } from './utils/theme.session';
-import { getUser } from './utils/user.session';
+import { getUserSession } from './utils/user.session';
 import { PlayerWithOrg } from './utils/types';
+import { getUserWithOrg } from './services/user.server';
 
 // https://remix.run/api/app#links
 export const links: LinksFunction = () => {
@@ -54,14 +56,27 @@ export const handle: { id: string } = {
 export const loader: LoaderFunction = async ({ request }) => {
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
-  const user = await getUser(request);
-  const data: LoaderData = {
-    session: {
-      theme,
-      user,
-    },
-  };
-  return data;
+  const userSession = await getUserSession(request);
+  const sessionUser = userSession.getUser();
+  let data: LoaderData;
+  let user;
+  if (sessionUser?.id) {
+    user = await getUserWithOrg(sessionUser?.id);
+  }
+  if (user) {
+    userSession.setUser(user);
+    data = {
+      session: {
+        theme,
+        user,
+      },
+    };
+  } else {
+    data = {
+      session: { theme, user: null },
+    };
+  }
+  return json(data, { headers: { 'Set-Cookie': await userSession.commit() } });
 };
 
 // https://remix.run/api/conventions#default-export
@@ -188,7 +203,9 @@ function DocumentWithTheme({
 }): JSX.Element {
   return (
     <ThemeProvider suppliedTheme={theme}>
-      <Document {...rest} title={'PongTracker'}>{children}</Document>
+      <Document {...rest} title={'PongTracker'}>
+        {children}
+      </Document>
     </ThemeProvider>
   );
 }

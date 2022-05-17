@@ -1,8 +1,11 @@
 import { json, redirect } from 'remix';
-import { getUserSession } from '~/utils/user.session';
+import { getUserSession, requireUser } from '~/utils/user.session';
 import { getOrganizationByCode } from '../organization.server';
-import { createUser, getUserByEmail, login } from '../user.server';
+import { createUser, getUserByEmail, login, updateUser } from '../user.server';
 import {
+  EditUserActionData,
+  EditUserErrors,
+  EditUserFields,
   LoginActionData,
   LoginErrors,
   LoginFields,
@@ -136,6 +139,39 @@ export const handleLoginFormSubmission = async (request: Request) => {
     data = { status: 'success' };
     return redirect('/play', {
       headers: { 'Set-Cookie': await userSession.commit() },
+    });
+  } catch (error: unknown) {
+    errors.generalError = getErrorMessage(error);
+    data = { status: 'error', errors };
+    return json(data, 500);
+  }
+};
+
+export const handleEditUserFormSubmission = async (request: Request) => {
+  const requestText = await request.text();
+  const form = new URLSearchParams(requestText);
+
+  const fields: EditUserFields = {
+    name: form.get('name') ?? '',
+  };
+
+  const errors: EditUserErrors = {
+    generalError: null,
+    name: getNameError(fields.name),
+  };
+
+  let data: EditUserActionData;
+  if (Object.values(errors).some((err) => err !== null)) {
+    data = { status: 'error', errors };
+    return json(data, 400);
+  }
+
+  try {
+    const user = await requireUser(request);
+    await updateUser({ id: user.id, ...fields });
+    data = { status: 'success' };
+    return json({
+      ...data,
     });
   } catch (error: unknown) {
     errors.generalError = getErrorMessage(error);
