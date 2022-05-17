@@ -155,7 +155,7 @@ function Document({
   const [theme] = useTheme();
   const location = useLocation();
   return (
-    <html lang="en" className={theme}>
+    <html lang="en" className={`${theme} bg-primary`}>
       <head>
         <link
           rel="apple-touch-icon"

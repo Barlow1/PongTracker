@@ -1321,6 +1321,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: var(--color-gray-900);
 }
 
+.dark.bg-primary {
+  background-color: var(--color-gray-900);
+}
+
 .text-primary {
   color: var(--color-black);
 }
