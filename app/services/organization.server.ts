@@ -19,3 +19,17 @@ export const getOrganizationByCode = async (
       prisma.$disconnect();
     });
 };
+
+export const getOrganizationNameCount = async (
+  name: string
+): Promise<number | null> => {
+  return prisma.organization
+    .count({
+      where: {
+        name,
+      },
+    })
+    .finally(() => {
+      prisma.$disconnect();
+    });
+};

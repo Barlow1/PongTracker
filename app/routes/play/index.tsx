@@ -6,7 +6,7 @@ import { requireUser } from "~/utils/user.session";
 export const links: LinksFunction = () => [
   {
     rel: 'image',
-    href: '/pingpongtable.png',
+    href: '/PlayHero.jpeg',
   },
 ];
 export const loader: LoaderFunction = async ({request}: {request: Request}) => {

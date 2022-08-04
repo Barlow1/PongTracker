@@ -37,8 +37,20 @@ export default function Settings() {
   const data = useActionData<EditUserActionData>();
   const success = data?.status === 'success';
   const submit = useSubmit();
-  const handleSubmitEvent = (event: { keyCode?: number; currentTarget: { form: HTMLInputElement | HTMLFormElement | HTMLButtonElement | FormData | { [name: string]: string; } | null; blur: () => void; }; }) => {
-          console.log('charCode', event.keyCode);
+  const handleSubmitEvent = (event: {
+    keyCode?: number;
+    currentTarget: {
+      form:
+        | HTMLInputElement
+        | HTMLFormElement
+        | HTMLButtonElement
+        | FormData
+        | { [name: string]: string }
+        | null;
+      blur: () => void;
+    };
+  }) => {
+    console.log('charCode', event.keyCode);
 
     if (event.keyCode && event.keyCode === 13) {
       submit(event.currentTarget.form, { method: 'post', replace: true });
@@ -95,6 +107,14 @@ export default function Settings() {
             type="text"
             label="Organization"
             defaultValue={user.organization.name || ''}
+            className={'disabled:bg-gray-600 disabled:text-gray-300'}
+          />
+          <Field
+            disabled
+            name="organizationCode"
+            type="text"
+            label="Organization Code"
+            defaultValue={user.organization.code || ''}
             className={'disabled:bg-gray-600 disabled:text-gray-300'}
           />
         </Form>

@@ -133,10 +133,10 @@ hr {
   margin-bottom: 2rem;
 }
 
-input:where([type="text"]),
-input:where([type="search"]),
-input:where([type="email"]),
-input:where([type="password"]) {
+input:where([type='text']),
+input:where([type='search']),
+input:where([type='email']),
+input:where([type='password']) {
   display: block;
   border: 1px solid var(--color-border);
   width: 100%;
@@ -151,7 +151,23 @@ input:where([type="password"]) {
   text-indent: 10px;
 }
 
-input:where([type="number"]) {
+select {
+  display: block;
+  border: 1px solid var(--color-border);
+  width: 100%;
+  font: inherit;
+  line-height: 1;
+  height: calc(1ch + 1.5em);
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  background-color: var(--bg-alt);
+  border-radius: 9999px;
+  color: var(--color-foreground);
+  text-indent: 10px;
+  border-right: 10px solid transparent;
+}
+
+input:where([type='number']) {
   display: block;
   border: 1px solid var(--color-border);
   width: 60px;
@@ -238,8 +254,8 @@ textarea {
   padding-bottom: var(--space);
   width: 100%;
 }
-input:where([type="radio"]):checked:disabled::after {
-    background-color:red;
+input:where([type='radio']):checked:disabled::after {
+  background-color: red;
 }
 
 .form {
@@ -282,7 +298,7 @@ a:hover {
 }
 
 .underlined:after {
-  content: "";
+  content: '';
   height: 2px;
   transform: scaleX(0);
   transition: transform 0.25s ease;
@@ -440,7 +456,7 @@ a:hover {
           animation-duration: 350ms;
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
-  content: "";
+  content: '';
   width: 20px;
   height: 20px;
   border: 3px solid var(--gray-border);
@@ -456,7 +472,7 @@ a:hover {
   transition-delay: 0ms;
   transition: all 250ms ease-in;
   position: absolute;
-  content: "";
+  content: '';
   box-shadow: var(--gray-dots) -29px -1px 0 -2px,
     var(--gray-dots) -26px -6px 0 -1px;
   left: 79px;
@@ -506,7 +522,7 @@ a:hover {
 }
 
 .toggle--label-background:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 4px;
   height: 4px;
@@ -518,7 +534,7 @@ a:hover {
 }
 
 .toggle--label-background:after {
-  content: "";
+  content: '';
   position: absolute;
   width: 4px;
   height: 4px;

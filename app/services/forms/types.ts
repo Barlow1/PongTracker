@@ -4,16 +4,17 @@ export type RegistrationFields = {
   password: string;
   organization: string;
   organizationName: string;
+  isExistingOrganization: string;
 };
 
 export type RegistrationErrors = Record<
-  keyof RegistrationFields | "generalError",
+  keyof RegistrationFields | 'generalError',
   string | null
 >;
 
 export type RegistrationActionData =
-  | { status: "success" }
-  | { status: "error" | "organizationError"; errors: RegistrationErrors };
+  | { status: 'success' }
+  | { status: 'error' | 'organizationError'; errors: RegistrationErrors };
 
 export type LoginFields = {
   email: string;
@@ -21,23 +22,23 @@ export type LoginFields = {
 };
 
 export type LoginErrors = Record<
-  keyof LoginFields | "generalError",
+  keyof LoginFields | 'generalError',
   string | null
 >;
 
 export type LoginActionData =
-  | { status: "success" }
-  | { status: "error"; errors: LoginErrors };
+  | { status: 'success' }
+  | { status: 'error'; errors: LoginErrors };
 
-  export type EditUserFields = {
-    name: string;
-  };
+export type EditUserFields = {
+  name: string;
+};
 
-  export type EditUserErrors = Record<
-    keyof EditUserFields | 'generalError',
-    string | null
-  >;
+export type EditUserErrors = Record<
+  keyof EditUserFields | 'generalError',
+  string | null
+>;
 
-  export type EditUserActionData =
-    | { status: 'success' }
-    | { status: 'error'; errors: EditUserErrors };
+export type EditUserActionData =
+  | { status: 'success' }
+  | { status: 'error'; errors: EditUserErrors };

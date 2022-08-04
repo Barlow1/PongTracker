@@ -67,7 +67,7 @@ export const createUser = async ({
     })
     .catch((error) => {
       console.log('Error adding user', error);
-      return error;
+      throw error;
     })
     .finally(() => {
       prisma.$disconnect();

@@ -1,6 +1,9 @@
 import { json, redirect } from 'remix';
 import { getUserSession, requireUser } from '~/utils/user.session';
-import { getOrganizationByCode } from '../organization.server';
+import {
+  getOrganizationByCode,
+  getOrganizationNameCount,
+} from '../organization.server';
 import { createUser, getUserByEmail, login, updateUser } from '../user.server';
 import {
   EditUserActionData,
@@ -39,22 +42,46 @@ const getPasswordError = (password: string | null) => {
   return null;
 };
 
-const getOrganizationError = async (organization: string | null) => {
-  if (!organization) return `Organization Code is required`;
-  if (organization.length > 60) return `Organization Code is too long`;
+const getOrganizationError = (
+  organization: string | null,
+  isExistingOrganization: string | null
+) => {
+  if (isExistingOrganization === 'true') {
+    if (!organization) return `Organization Code is required`;
+    if (organization.length > 60) return `Organization Code is too long`;
+  }
+
   return null;
 };
 
-const getOrganizationNameError = (organization: string | null) => {
-  if (organization?.length && organization?.length > 60) {
-    return `Organization Name is too long`;
+const getIsExistingOrganizationError = (
+  isExistingOrganization: string | null
+) => {
+  if (!isExistingOrganization) return `This field is required`;
+  return null;
+};
+
+const getOrganizationNameError = (
+  organization: string | null,
+  isExistingOrganization: string | null
+) => {
+  if (isExistingOrganization === 'false') {
+    if (!organization?.length) return `Organization Name is required`;
+    if (organization?.length && organization?.length > 60) {
+      return `Organization Name is too long`;
+    }
   }
   return null;
 };
 
 function getErrorMessage(error: unknown) {
   if (typeof error === 'string') return error;
-  if (error instanceof Error) return error.message;
+  if (error instanceof Error) {
+    if (error.message.includes('prisma')) {
+      return 'Sorry, our database had an error. Can you please try again?';
+    }
+    return error.message;
+  }
   return 'Unknown Error';
 }
 
@@ -68,6 +95,7 @@ export const handleRegistrationFormSubmission = async (request: Request) => {
     password: form.get('password') ?? '',
     organization: form.get('organization') ?? '',
     organizationName: form.get('organizationName') ?? '',
+    isExistingOrganization: form.get('isExistingOrganization') ?? '',
   };
 
   const errors: RegistrationErrors = {
@@ -75,8 +103,17 @@ export const handleRegistrationFormSubmission = async (request: Request) => {
     name: getNameError(fields.name),
     email: await getRegisterEmailError(fields.email),
     password: getPasswordError(fields.password),
-    organization: await getOrganizationError(fields.organization),
-    organizationName: getOrganizationNameError(fields.organizationName),
+    organization: getOrganizationError(
+      fields.organization,
+      fields.isExistingOrganization
+    ),
+    organizationName: getOrganizationNameError(
+      fields.organizationName,
+      fields.isExistingOrganization
+    ),
+    isExistingOrganization: getIsExistingOrganizationError(
+      fields.isExistingOrganization
+    ),
   };
 
   let data: RegistrationActionData;
@@ -95,6 +132,17 @@ export const handleRegistrationFormSubmission = async (request: Request) => {
         return json(data, 404);
       }
       fields.organizationName = existing.name;
+    } else {
+      const cleansedName = fields.organizationName.replace(/\W+/, ' ');
+      const organizationNameCount = await getOrganizationNameCount(
+        fields.organizationName
+      );
+      const trimmedName = cleansedName.replace(' ', '');
+      const newOrganizationCode = `${trimmedName}${
+        organizationNameCount || ''
+      }`;
+      fields.organization = newOrganizationCode;
+      fields.organizationName = cleansedName;
     }
     const user = await createUser(fields);
     const userSession = await getUserSession(request);
