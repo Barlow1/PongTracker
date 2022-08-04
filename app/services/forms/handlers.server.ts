@@ -2,7 +2,7 @@ import { json, redirect } from 'remix';
 import { getUserSession, requireUser } from '~/utils/user.session';
 import {
   getOrganizationByCode,
-  getOrganizationNameCount,
+  getOrganizationCodeCount,
 } from '../organization.server';
 import { createUser, getUserByEmail, login, updateUser } from '../user.server';
 import {
@@ -134,10 +134,10 @@ export const handleRegistrationFormSubmission = async (request: Request) => {
       fields.organizationName = existing.name;
     } else {
       const cleansedName = fields.organizationName.replace(/\W+/, ' ');
-      const organizationNameCount = await getOrganizationNameCount(
-        fields.organizationName
-      );
       const trimmedName = cleansedName.replace(' ', '');
+      const organizationNameCount = await getOrganizationCodeCount(
+        trimmedName
+      );
       const newOrganizationCode = `${trimmedName}${
         organizationNameCount || ''
       }`;

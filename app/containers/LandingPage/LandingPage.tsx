@@ -29,7 +29,7 @@ const LandingPage = () => {
               We make workplaces more fun!
             </H3>
             <Paragraph>
-              Spice 🌶 up your office with a little competition. Get historical
+              Spice 🌶 up your office with a little ping pong competition. Get historical
               score tracking and live leader boards for FREE 🏆
             </Paragraph>
             {user ? (

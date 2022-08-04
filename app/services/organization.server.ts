@@ -20,13 +20,13 @@ export const getOrganizationByCode = async (
     });
 };
 
-export const getOrganizationNameCount = async (
-  name: string
+export const getOrganizationCodeCount = async (
+  code: string
 ): Promise<number | null> => {
   return prisma.organization
     .count({
       where: {
-        name,
+        code: { startsWith: code },
       },
     })
     .finally(() => {
